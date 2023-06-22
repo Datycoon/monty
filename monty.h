@@ -1,14 +1,14 @@
-#ifndef _MONTY_H_
-#define _MONTY_H_
+#ifndef MONTY_H
+#define MONTY_H
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 #include <sys/types.h>
+#include <errno.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <ctype.h>
+#include <unistd.h>
+#include <string.h>
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -17,7 +17,7 @@
  * @next: points to the next element of the stack (or queue)
  *
  * Description: doubly linked list node structure
- * for stack, queues, LIFO, FIFO Alx  project
+ * for stack, queues, LIFO, FIFO  project
  */
 typedef struct stack_s
 {
@@ -32,7 +32,7 @@ typedef struct stack_s
  * @f: function to handle the opcode
  *
  * Description: opcode and its function
- * for stack, queues, LIFO, FIFO Alx  project
+ * for stack, queues, LIFO, FIFO  project
  */
 typedef struct instruction_s
 {
@@ -41,39 +41,47 @@ typedef struct instruction_s
 } instruction_t;
 
 /**
- * struct GlobalStruct - contains all globals
- * @arg: arguments
- * @input: the input
- * @stack_queue: the stack or queue
- * @file: the file
+ * struct glob_s - global and its funcs
+ * @fd: File descriptor
+ * @line: Line to getline
+ *
+ * Description: To handle the file and getline
  */
-typedef struct Global_struct
+typedef struct glob_s
 {
-	char *arguments;
-	char *input;
-	int stack_queue;
-	FILE *file;
-} global_variables;
+	FILE *fd;
+	char *line;
+} glob_t;
 
-extern global_variables argument_container;
-global_variables argument_container;
+extern glob_t global;
+extern int value;
 
-int isnum(char *str);
-void free_stack(stack_t **head);
-void get_opcode(stack_t **stack, unsigned int line_number, char *command);
-void create_buff(char *f_name);
-void op_push(stack_t **stack, unsigned int line_number);
-void op_pall(stack_t **stack, unsigned int line_number);
-void op_pint(stack_t **stack, unsigned int line_number);
-void op_pop(stack_t **stack, unsigned int line_number);
-void op_swap(stack_t **stack, unsigned int line_number);
-void op_nop(stack_t **stack, unsigned int line_number);
-void op_add(stack_t **stack, unsigned int line_number);
-void op_sub(stack_t **stack, unsigned int line_number);
-void op_div(stack_t **stack, unsigned int line_number);
-void op_mul(stack_t **stack, unsigned int line_number);
-void op_mod(stack_t **stack, unsigned int line_number);
-void nasus(stack_t **stack, stack_t *fresh);
-void veigar(stack_t **stack, stack_t *fresh);
+void handle_command(char *argv);
 
-#endif /* Life of Brian */
+int get_opc(stack_t **stack, char *arg, char *item, int count);
+
+void _push(stack_t **stack, unsigned int line_number);
+void _pall(stack_t **stack, unsigned int line_number);
+void _pint(stack_t **stack, unsigned int line_number);
+void _swap(stack_t **stack, unsigned int line_number);
+void _pop(stack_t **stack, unsigned int line_number);
+void _add(stack_t **stack, unsigned int line_number);
+void _sub(stack_t **stack, unsigned int line_number);
+void _nop(stack_t **stack, unsigned int line_number);
+void _div(stack_t **stack, unsigned int line_number);
+void _mul(stack_t **stack, unsigned int line_number);
+void _mod(stack_t **stack, unsigned int line_number);
+void _pchar(stack_t **stack, unsigned int line_number);
+void _pstr(stack_t **stack, unsigned int line_number);
+void free_dlistint(stack_t *stack);
+void cleanStack(stack_t **stack);
+
+/*Help*/
+int _isdigit(char *c);
+stack_t *new_Node(int n);
+
+/* handle_errors */
+void push_error(FILE *fd, char *line, stack_t *stack, int count);
+void ins_error(FILE *fd, char *line, stack_t *stack, char *count, int item);
+
+#endif
